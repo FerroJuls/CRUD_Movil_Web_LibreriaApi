@@ -2,8 +2,8 @@ package com.example.movillibreria.models
 
 
 data class prestamo(
-    val titulo:String,
+    val libro:String,
     val fechaPrestamo:String,
     val fechaDevolucion:String,
-    val nombre:String
+    val usuario:String
 )

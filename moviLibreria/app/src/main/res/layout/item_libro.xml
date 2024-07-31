@@ -33,21 +33,21 @@
                 android:textColor="#000000" />
 
             <TextView
-                android:id="@+id/lblFechaPrestamo"
+                android:id="@+id/lblAutor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Autor" />
 
             <TextView
-                android:id="@+id/lblFechaDevolucion"
+                android:id="@+id/lblIsbn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="ISBN" />
 
             <TextView
-                android:id="@+id/lblNombre"
+                android:id="@+id/lblGenero"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -61,7 +61,7 @@
             android:orientation="vertical">
 
             <Button
-                android:id="@+id/button16"
+                android:id="@+id/btnEditar"
                 android:layout_width="29dp"
                 android:layout_height="38dp"
                 android:backgroundTint="#000000"
@@ -74,7 +74,7 @@
                 android:layout_height="5dp" />
 
             <Button
-                android:id="@+id/button17"
+                android:id="@+id/btnEliminar"
                 android:layout_width="29dp"
                 android:layout_height="35dp"
                 android:backgroundTint="#000000"

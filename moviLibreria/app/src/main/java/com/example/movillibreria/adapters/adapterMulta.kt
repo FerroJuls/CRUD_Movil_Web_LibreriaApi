@@ -14,18 +14,11 @@ class adapterMulta
      var context: Context
 ): RecyclerView.Adapter<adapterMulta.MyHolder>() {
     inner class MyHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        lateinit var lblTitulo: TextView
-        lateinit var lblNombre: TextView
-        lateinit var lblFechaDevolucion: TextView
-        lateinit var lblValorMulta: TextView
 
-        init {
-            lblTitulo = itemView.findViewById(R.id.lblTitulo)
-            lblNombre = itemView.findViewById(R.id.lblNombre)
-            lblFechaDevolucion = itemView.findViewById(R.id.lblFechaDevolucion)
-            lblValorMulta = itemView.findViewById(R.id.lblValorMulta)
-
-        }
+        val lblTitulo: TextView  = itemView.findViewById(R.id.lblTitulo)
+        val lblNombre: TextView  = itemView.findViewById(R.id.lblNombre)
+        val lblFechaDevolucion: TextView  = itemView.findViewById(R.id.lblFechaDevolucion)
+        val lblValorMulta: TextView  = itemView.findViewById(R.id.lblNombre)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): adapterMulta.MyHolder {
@@ -35,8 +28,8 @@ class adapterMulta
 
     override fun onBindViewHolder(holder: adapterMulta.MyHolder, position: Int) {
         val multa = listMulta[position]
-        holder.lblTitulo.text = multa.titulo
-        holder.lblNombre.text = multa.nombre
+        holder.lblTitulo.text = multa.prestamolibro
+        holder.lblNombre.text = multa.prestamousuario
         holder.lblFechaDevolucion.text = multa.fechaDevolucion
         holder.lblValorMulta.text = multa.valorMulta
     }

@@ -4,20 +4,26 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.android.volley.Request
+import com.android.volley.toolbox.JsonArrayRequest
+import com.android.volley.toolbox.Volley
+import com.example.biblioteca.config.config
 import com.example.movillibreria.adapters.adapterUsers
 import com.example.movillibreria.databinding.FragmentGalleryBinding
 import com.example.movillibreria.models.users
+import org.json.JSONArray
+import org.json.JSONObject
 
 class GalleryFragment : Fragment() {
 
     private var _binding: FragmentGalleryBinding? = null
     private val binding get() = _binding!!
     private lateinit var listUsers: MutableList<users>
+    private lateinit var adapterUsers: adapterUsers
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,36 +40,65 @@ class GalleryFragment : Fragment() {
         galleryViewModel.text.observe(viewLifecycleOwner) {
             textView.text = it
         }
-
         listUsers = mutableListOf()
-        listUsers.add(users("Admin", "Maidy", "Neiva", "maidy@gmail.com"))
-        listUsers.add(users("Admin", "Maidy", "Neiva", "maidy@gmail.com"))
-        listUsers.add(users("Instructor", "Carlos", "Bogotá", "carlos@gmail.com"))
-        listUsers.add(users("Aprendiz", "Laura", "Medellín", "laura@gmail.com"))
-        listUsers.add(users("Aprendiz", "Anyi", "Cali", "anyi@gmail.com"))
-        listUsers.add(users("Aprendiz", "Angie", "Barranquilla", "angie@gmail.com"))
-        listUsers.add(users("Aprendiz", "Camilo", "Cartagena", "camilo@gmail.com"))
-        listUsers.add(users("Aprendiz", "Aura", "Pereira", "aura@gmail.com"))
-        listUsers.add(users("Aprendiz", "Penna", "Bucaramanga", "penna@gmail.com"))
-        listUsers.add(users("Aprendiz", "Kevin", "Manizales", "kevin@gmail.com"))
-        listUsers.add(users("Admin", "Julian", "Neiva", "julian@gmail.com"))
-        listUsers.add(users("Instructor", "Andrés", "Bogotá", "andres@gmail.com"))
-        listUsers.add(users("Aprendiz", "Sofia", "Medellín", "sofia@gmail.com"))
-        listUsers.add(users("Aprendiz", "María", "Cali", "maria@gmail.com"))
-        listUsers.add(users("Aprendiz", "Luisa", "Barranquilla", "luisa@gmail.com"))
-        listUsers.add(users("Aprendiz", "Diego", "Cartagena", "diego@gmail.com"))
-        listUsers.add(users("Aprendiz", "Diana", "Pereira", "diana@gmail.com"))
-        listUsers.add(users("Aprendiz", "Paula", "Bucaramanga", "paula@gmail.com"))
-        listUsers.add(users("Aprendiz", "Samuel", "Manizales", "samuel@gmail.com"))
-        listUsers.add(users("Admin", "Ana", "Neiva", "ana@gmail.com"))
-        listUsers.add(users("Instructor", "Fernando", "Bogotá", "fernando@gmail.com"))
 
-        val recyclerView = binding.RVUsers
-        recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        val adapterUsers = adapterUsers(listUsers, requireContext())
-        recyclerView.adapter = adapterUsers
+
+        // Llama a la función para cargar los datos
+        cargarUsuarios()
 
         return root
+    }
+
+    private fun cargarUsuarios() {
+        try {
+            val request = JsonArrayRequest(
+                Request.Method.GET,
+                config.urlUsers,
+                null,
+                { response ->
+                    parseJsonResponse(response)
+                    // Inicializa la lista de usuarios y el adaptador
+
+                    adapterUsers = adapterUsers(listUsers, requireContext())
+
+                    // Configura el RecyclerView
+                    val recyclerView = binding.RVUsers
+                    recyclerView.layoutManager = LinearLayoutManager(requireContext())
+                    recyclerView.adapter = adapterUsers
+
+                },
+                { error ->
+                    // Mostrar error si la carga falla
+                    Toast.makeText(
+                        requireContext(),
+                        "Error en la carga: ${error.message}",
+                        Toast.LENGTH_LONG
+                    ).show()
+                    error.printStackTrace() // Muestra el error en la consola para depuración
+                }
+            )
+
+            // Agrega la solicitud a la cola
+            val queue = Volley.newRequestQueue(requireContext())
+            queue.add(request)
+        }catch (Error: Exception){
+            var excepcion= Error
+        }
+    }
+
+    private fun parseJsonResponse(response: JSONArray) {
+        //clear=Vaciando la lista
+        listUsers.clear() // Limpia la lista antes de agregar nuevos datos
+        for (i in 0 until response.length()) {
+            val userJson: JSONObject = response.getJSONObject(i)
+            val user = users(
+                tipoUser = userJson.getString("tipoUser"),
+                nombre = userJson.getString("nombre"),
+                direccion = userJson.getString("direccion"),
+                correo = userJson.getString("correo")
+            )
+            listUsers.add(user)
+        }
     }
 
     override fun onDestroyView() {

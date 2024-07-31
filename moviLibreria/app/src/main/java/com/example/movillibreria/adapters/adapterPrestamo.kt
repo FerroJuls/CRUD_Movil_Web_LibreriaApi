@@ -14,18 +14,12 @@ class adapterPrestamo
      var context: Context
 ): RecyclerView.Adapter<adapterPrestamo.MyHolder>() {
     inner class MyHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        lateinit var lblTitulo: TextView
-        lateinit var lblFechaPrestamo: TextView
-        lateinit var lblFechaDevolucion: TextView
-        lateinit var lblNombre: TextView
 
-        init {
-            lblTitulo = itemView.findViewById(R.id.lblTitulo)
-            lblFechaPrestamo = itemView.findViewById(R.id.lblFechaPrestamo)
-            lblFechaDevolucion = itemView.findViewById(R.id.lblFechaDevolucion)
-            lblNombre = itemView.findViewById(R.id.lblNombre)
+        val lblTitulo: TextView  = itemView.findViewById(R.id.lblTitulo)
+        val lblFechaPrestamo: TextView  = itemView.findViewById(R.id.lblFechaPrestamo)
+        val lblFechaDevolucion: TextView  = itemView.findViewById(R.id.lblFechaDevolucion)
+        val lblNombre: TextView  = itemView.findViewById(R.id.lblNombre)
 
-        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): adapterPrestamo.MyHolder {
@@ -35,10 +29,10 @@ class adapterPrestamo
 
     override fun onBindViewHolder(holder: adapterPrestamo.MyHolder, position: Int) {
         val prestamo = listPrestamo[position]
-        holder.lblTitulo.text = prestamo.titulo
+        holder.lblTitulo.text = prestamo.libro
         holder.lblFechaPrestamo.text = prestamo.fechaPrestamo
         holder.lblFechaDevolucion.text = prestamo.fechaDevolucion
-        holder.lblNombre.text = prestamo.nombre
+        holder.lblNombre.text = prestamo.usuario
     }
 
     override fun getItemCount(): Int {

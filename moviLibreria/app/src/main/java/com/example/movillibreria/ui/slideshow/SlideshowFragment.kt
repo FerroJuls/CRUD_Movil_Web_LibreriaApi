@@ -4,19 +4,28 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.android.volley.Request
+import com.android.volley.toolbox.JsonArrayRequest
+import com.android.volley.toolbox.Volley
+import com.example.biblioteca.config.config
+import com.example.movillibreria.R
 import com.example.movillibreria.adapters.adapterLibro
+import com.example.movillibreria.adapters.adapterUsers
 import com.example.movillibreria.databinding.FragmentSlideshowBinding
 import com.example.movillibreria.models.libro
+import org.json.JSONArray
+import org.json.JSONObject
 
 class SlideshowFragment : Fragment() {
 
     private var _binding: FragmentSlideshowBinding? = null
     private val binding get() = _binding!!
     private lateinit var listLibro: MutableList<libro>
+    private lateinit var adapterLibro: adapterLibro
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,28 +44,71 @@ class SlideshowFragment : Fragment() {
         }
 
         listLibro = mutableListOf()
-        listLibro.add(libro("Cien años de soledad", "Gabriel García Márquez", "9780060", "Realismo mágico"));
-        listLibro.add(libro("1984", "George Orwell", "9780451", "Distopía"));
-        listLibro.add(libro("El gran Gatsby", "F. Scott Fitzgerald", "978074", "Ficción clásica"));
-        listLibro.add(libro("Matar a un ruiseñor", "Harper Lee", "97800", "Ficción"));
-        listLibro.add(libro("Don Quijote de la Mancha", "Miguel de Cervantes", "978848", "Novela clásica"));
-        listLibro.add(libro("Orgullo y prejuicio", "Jane Austen", "9780141", "Romántico"));
-        listLibro.add(libro("Los hermanos Karamazov", "Fiódor Dostoyevski", "9780140", "Ficción filosófica"));
-        listLibro.add(libro("El nombre de la rosa", "Umberto Eco", "978015600", "Misterio histórico"));
-        listLibro.add(libro("La sombra del viento", "Carlos Ruiz Zafón", "9788408", "Novela histórica"));
-        listLibro.add(libro("Crónica de una muerte anunciada", "Gabriel García Márquez", "9780307", "Realismo mágico"));
-        listLibro.add(libro("Cumbres borrascosas", "Emily Brontë", "9780141", "Gótico"));
-        listLibro.add(libro("El alquimista", "Paulo Coelho", "978006115", "Ficción filosófica"));
-        listLibro.add(libro("El Hobbit", "J.R.R. Tolkien", "97803453", "Fantasía"));
-        listLibro.add(libro("Los juegos del hambre", "Suzanne Collins", "978048", "Ciencia ficción"));
 
-
-        val recyclerView = binding.RVLibro
-        recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        val adapterLibro = adapterLibro(listLibro, requireContext())
-        recyclerView.adapter = adapterLibro
+        cargarLibros()
 
         return root
+    }
+
+    private fun cargarLibros() {
+        try {
+            val request = JsonArrayRequest(
+                Request.Method.GET,
+                config.urlLibros,
+                null,
+                { response ->
+                    parseJsonResponse(response)
+                    // Inicializa la lista de LIBROS y el adaptador
+
+                    adapterLibro = adapterLibro(listLibro, requireContext())
+
+                    val recyclerView = binding.RVLibro
+                    recyclerView.layoutManager = LinearLayoutManager(requireContext())
+                    adapterLibro.onClick={
+                        val bundle= Bundle()
+                        //bundle.putInt("idLibro",it.idLibro("id"))
+                        //val transaction=requireFragmentManager().beginTransaction()
+                        //val fragmento = SlideshowFragment()
+                        //fragmento.arguments=bundle
+                        //transaction.replace(R.id.SlideshoViewModel,fragmento).commit()
+                        //transaction.addToBackStack(null)
+                    }
+                    recyclerView.adapter = adapterLibro
+
+                },
+                { error ->
+                    // Mostrar error si la carga falla
+                    Toast.makeText(
+                        requireContext(),
+                        "Error en la carga: ${error.message}",
+                        Toast.LENGTH_LONG
+                    ).show()
+                    error.printStackTrace() // Muestra el error en la consola para depuración
+                }
+            )
+
+            // Agrega la solicitud a la cola
+            val queue = Volley.newRequestQueue(requireContext())
+            queue.add(request)
+        }catch (Error: Exception){
+            var excepcion= Error
+        }
+    }
+
+    private fun parseJsonResponse(response: JSONArray) {
+        //clear=Vaciando la lista
+        listLibro.clear() // Limpia la lista antes de agregar nuevos datos
+        for (i in 0 until response.length()) {
+            val libroJson: JSONObject = response.getJSONObject(i)
+            val libro = libro(
+                idLibro = libroJson.getString("idLibro"),
+                titulo = libroJson.getString("titulo"),
+                autor = libroJson.getString("autor"),
+                isbn = libroJson.getString("isbn"),
+                genero = libroJson.getString("genero")
+            )
+            listLibro.add(libro)
+        }
     }
 
     override fun onDestroyView() {

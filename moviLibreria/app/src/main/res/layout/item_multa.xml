@@ -13,18 +13,13 @@
 
         <ImageView
             android:id="@+id/imageView14"
-            android:layout_width="66dp"
+            android:layout_width="30dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:src="@drawable/receipt_solid" />
 
-        <Space
-            android:layout_width="5dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
-
         <LinearLayout
-            android:layout_width="75dp"
+            android:layout_width="39dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical">
@@ -60,7 +55,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="164dp"
+            android:layout_width="196dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical">
