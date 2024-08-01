@@ -70,7 +70,7 @@ class SlideshowFragment : Fragment() {
                     /*
                     la variable it tiene la información del libro a eliminar
                      */
-                    
+
                     val builder = AlertDialog.Builder(requireContext())
                     builder.setMessage("Desea eliminar")
                         .setPositiveButton("Si") { dialog, id ->
