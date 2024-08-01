@@ -12,4 +12,5 @@
     <string name="menu_slideshow">Biblioteca</string>
     <string name="menu_prestamo">Prestamo</string>
     <string name="menu_multa">Multa</string>
+    <string name="menu_detalleLibro">Detalle Libro</string>
 </resources>

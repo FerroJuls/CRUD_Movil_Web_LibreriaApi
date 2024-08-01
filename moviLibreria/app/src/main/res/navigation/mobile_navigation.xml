@@ -21,7 +21,15 @@
         android:id="@+id/nav_slideshow"
         android:name="com.example.movillibreria.ui.slideshow.SlideshowFragment"
         android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
+        tools:layout="@layout/fragment_slideshow" >
+        <action
+            android:id="@+id/action_nav_slideshow_to_nav_detalleLibro"
+            app:destination="@id/nav_detalleLibro" >
+            <argument
+                android:name="idLibro"
+                app:argType="string" />
+        </action>
+    </fragment>
 
     <fragment
         android:id="@+id/nav_prestamo"
@@ -34,4 +42,15 @@
         android:name="com.example.movillibreria.ui.multa.MultaFragment"
         android:label="@string/menu_multa"
         tools:layout="@layout/fragment_multa" />
+
+    <fragment
+        android:id="@+id/nav_detalleLibro"
+        android:name="com.example.movillibreria.ui.slideshow.libro.detalleLibroFragment"
+        android:label="@string/menu_detalleLibro"
+        tools:layout="@layout/fragment_detalle_libro" >
+        <argument
+            android:name="idLibro"
+            app:argType="string" />
+    </fragment>
+
 </navigation>
